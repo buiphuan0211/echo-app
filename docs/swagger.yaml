@@ -1,0 +1,640 @@
+definitions:
+  model.CategoryCreateBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+  model.CategoryUpdateBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  model.CreateReview:
+    properties:
+      content:
+        type: string
+      rating:
+        type: integer
+    type: object
+  model.OrderCreate:
+    properties:
+      deliveryId:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/model.OrderItemCreate'
+        type: array
+      note:
+        type: string
+      orderCode:
+        type: string
+      payment:
+        $ref: '#/definitions/model.PaymentType'
+      status:
+        type: string
+      totalPrice:
+        type: integer
+      userId:
+        type: string
+    type: object
+  model.OrderItemCreate:
+    properties:
+      note:
+        type: string
+      price:
+        type: integer
+      productId:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  model.PaymentType:
+    properties:
+      method:
+        type: string
+      status:
+        type: boolean
+    type: object
+  model.ProductCreate:
+    properties:
+      brandId:
+        type: string
+      categoryId:
+        type: string
+      description:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      rest:
+        type: integer
+      status:
+        type: string
+    type: object
+  model.ProductUpdate:
+    properties:
+      brandId:
+        type: string
+      categoryId:
+        type: string
+      description:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      rest:
+        type: integer
+    type: object
+  model.UserChangePassword:
+    properties:
+      currentPassword:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  model.UserLogin:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserRegister:
+    properties:
+      address:
+        type: string
+      dateOfBirth:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      status:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserUpdate:
+    properties:
+      address:
+        type: string
+      dateOfBirth:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      phone:
+        type: string
+    type: object
+  util.Response:
+    additionalProperties: true
+    type: object
+info:
+  contact: {}
+paths:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: get list category
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get categories
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: create category
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: CategoryCreate
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/model.CategoryCreateBody'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create category
+      tags:
+      - category
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete category by id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete category
+      tags:
+      - category
+    get:
+      consumes:
+      - application/json
+      description: get category by id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get category
+      tags:
+      - category
+    put:
+      consumes:
+      - application/json
+      description: update category by id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: CategoryUpdate
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/model.CategoryUpdateBody'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update category
+      tags:
+      - category
+  /categories/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: update status category by id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Update status category
+      tags:
+      - category
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: get list order by userId
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get orders
+      tags:
+      - order
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.OrderCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Create
+      tags:
+      - order
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: get list product
+      produces:
+      - application/json
+      responses: {}
+      summary: Get products
+      tags:
+      - product
+    post:
+      consumes:
+      - application/json
+      description: create product
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ProductCreate
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProductCreate'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create product
+      tags:
+      - product
+  /products/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get product by id
+      produces:
+      - application/json
+      responses: {}
+      summary: Get product
+      tags:
+      - product
+    patch:
+      consumes:
+      - application/json
+      description: update status product
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Update status product
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: update product
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateProduct
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProductUpdate'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update product
+      tags:
+      - product
+  /products/{id}/reviews:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ProductID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: get list review
+      tags:
+      - review
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: create review
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateReview'
+      produces:
+      - application/json
+      responses: {}
+      summary: create Review
+      tags:
+      - review
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: login user
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Login
+      tags:
+      - auth
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get info
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: update info by userId
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: update info
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Update info
+      tags:
+      - user
+  /users/me/password:
+    patch:
+      consumes:
+      - application/json
+      description: update password by user id
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: "user \tID"
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: change password
+        in: body
+        name: password
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserChangePassword'
+      produces:
+      - application/json
+      responses: {}
+      summary: Change password
+      tags:
+      - user
+  /users/register:
+    post:
+      description: user register
+      parameters:
+      - description: user register
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRegister'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Register
+      tags:
+      - auth
+swagger: "2.0"
